@@ -1,0 +1,220 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  AGENT
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  BLOCKED
+}
+
+enum TicketStatus {
+  OPEN
+  ASSIGNED
+  IN_PROGRESS
+  WAITING_FOR_USER
+  RESOLVED
+  REOPENED
+  CLOSED
+  CANCELLED
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum NotificationType {
+  TICKET_CREATED
+  TICKET_ASSIGNED
+  TICKET_STATUS_UPDATED
+  COMMENT_CREATED
+}
+
+model User {
+  id                    String               @id @default(uuid()) @db.Uuid
+  email                 String               @unique
+  passwordHash          String
+  fullName              String
+  avatarUrl             String?
+  role                  UserRole             @default(USER)
+  status                UserStatus           @default(ACTIVE)
+  deletedAt             DateTime?
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
+  createdTickets        Ticket[]             @relation("TicketCreator")
+  assignedTickets       Ticket[]             @relation("TicketAssignee")
+  comments              Comment[]
+  attachments           Attachment[]
+  receivedNotifications Notification[]       @relation("NotificationRecipient")
+  createdNotifications  Notification[]       @relation("NotificationActor")
+  ratings               Rating[]             @relation("RatingCreator")
+  receivedRatings       Rating[]             @relation("RatingAgent")
+  ticketHistory         TicketHistory[]
+  refreshTokens         RefreshToken[]
+  passwordResetTokens   PasswordResetToken[]
+
+  @@index([role, status])
+}
+
+model RefreshToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  tokenHash String    @unique
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+  userId    String    @db.Uuid
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model PasswordResetToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+  userId    String    @db.Uuid
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model Category {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  tickets     Ticket[]
+}
+
+model Ticket {
+  id            String          @id @default(uuid()) @db.Uuid
+  code          String          @unique
+  title         String
+  description   String
+  priority      TicketPriority  @default(MEDIUM)
+  status        TicketStatus    @default(OPEN)
+  creatorId     String          @db.Uuid
+  assigneeId    String?         @db.Uuid
+  categoryId    String          @db.Uuid
+  resolvedAt    DateTime?
+  closedAt      DateTime?
+  dueAt         DateTime?
+  deletedAt     DateTime?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  creator       User            @relation("TicketCreator", fields: [creatorId], references: [id], onDelete: Restrict)
+  assignee      User?           @relation("TicketAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  category      Category        @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  comments      Comment[]
+  attachments   Attachment[]
+  notifications Notification[]
+  rating        Rating?
+  history       TicketHistory[]
+
+  @@index([creatorId, status])
+  @@index([assigneeId, status])
+  @@index([categoryId])
+  @@index([createdAt])
+  @@index([dueAt, status])
+}
+
+model Comment {
+  id         String   @id @default(uuid()) @db.Uuid
+  content    String
+  isInternal Boolean  @default(false)
+  ticketId   String   @db.Uuid
+  authorId   String   @db.Uuid
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  ticket     Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  author     User     @relation(fields: [authorId], references: [id], onDelete: Restrict)
+
+  @@index([ticketId, createdAt])
+  @@index([authorId])
+}
+
+model Attachment {
+  id           String   @id @default(uuid()) @db.Uuid
+  originalName String
+  fileName     String   @unique
+  mimeType     String
+  size         Int
+  url          String
+  ticketId     String   @db.Uuid
+  uploaderId   String   @db.Uuid
+  createdAt    DateTime @default(now())
+  ticket       Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  uploader     User     @relation(fields: [uploaderId], references: [id], onDelete: Restrict)
+
+  @@index([ticketId])
+  @@index([uploaderId])
+}
+
+model Notification {
+  id          String           @id @default(uuid()) @db.Uuid
+  type        NotificationType
+  title       String
+  message     String
+  isRead      Boolean          @default(false)
+  recipientId String           @db.Uuid
+  actorId     String?          @db.Uuid
+  ticketId    String?          @db.Uuid
+  createdAt   DateTime         @default(now())
+  recipient   User             @relation("NotificationRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  actor       User?            @relation("NotificationActor", fields: [actorId], references: [id], onDelete: SetNull)
+  ticket      Ticket?          @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@index([recipientId, isRead, createdAt])
+  @@index([ticketId])
+}
+
+model Rating {
+  id        String   @id @default(uuid()) @db.Uuid
+  score     Int
+  comment   String?
+  ticketId  String   @unique @db.Uuid
+  creatorId String   @db.Uuid
+  agentId   String   @db.Uuid
+  createdAt DateTime @default(now())
+  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  creator   User     @relation("RatingCreator", fields: [creatorId], references: [id], onDelete: Restrict)
+  agent     User     @relation("RatingAgent", fields: [agentId], references: [id], onDelete: Restrict)
+
+  @@index([agentId])
+}
+
+model TicketHistory {
+  id        String   @id @default(uuid()) @db.Uuid
+  action    String
+  field     String?
+  oldValue  Json?
+  newValue  Json?
+  ticketId  String   @db.Uuid
+  actorId   String   @db.Uuid
+  createdAt DateTime @default(now())
+  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  actor     User     @relation(fields: [actorId], references: [id], onDelete: Restrict)
+
+  @@index([ticketId, createdAt])
+  @@index([actorId])
+}

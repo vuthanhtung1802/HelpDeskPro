@@ -1,0 +1,216 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "../vendor/shadcn-tailwind-4.13.0.css";
+
+@utility scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility scrollbar-gutter-stable {
+  scrollbar-gutter: stable;
+}
+
+:root {
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-neutral-0: #ffffff;
+  --color-neutral-50: #f8fafc;
+  --color-neutral-100: #f1f5f9;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-300: #cbd5e1;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-500: #64748b;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1e293b;
+  --color-neutral-900: #0f172a;
+  --color-success-50: #f0fdf4;
+  --color-success-600: #16a34a;
+  --color-warning-50: #fffbeb;
+  --color-warning-600: #d97706;
+  --color-danger-50: #fef2f2;
+  --color-danger-600: #dc2626;
+  --color-info-50: #eff6ff;
+  --color-info-600: #2563eb;
+
+  --background: var(--color-neutral-50);
+  --foreground: #0f172a;
+  --card: var(--color-neutral-0);
+  --card-foreground: var(--color-neutral-900);
+  --popover: var(--color-neutral-0);
+  --popover-foreground: var(--color-neutral-900);
+  --primary: var(--color-primary-600);
+  --primary-foreground: var(--color-neutral-0);
+  --secondary: var(--color-neutral-100);
+  --secondary-foreground: var(--color-neutral-900);
+  --muted: var(--color-neutral-100);
+  --muted-foreground: var(--color-neutral-500);
+  --accent: var(--color-primary-50);
+  --accent-foreground: var(--color-primary-700);
+  --destructive: var(--color-danger-600);
+  --border: var(--color-neutral-200);
+  --input: var(--color-neutral-200);
+  --ring: var(--color-primary-500);
+  --surface: var(--color-neutral-0);
+  --surface-subtle: var(--color-neutral-100);
+  --foreground-secondary: var(--color-neutral-600);
+  --foreground-muted: var(--color-neutral-500);
+  --border-strong: var(--color-neutral-300);
+  --success: var(--color-success-600);
+  --warning: var(--color-warning-600);
+  --danger: var(--color-danger-600);
+  --info: var(--color-info-600);
+  --chart-1: #f54900;
+  --chart-2: #009689;
+  --chart-3: #104e64;
+  --chart-4: #ffb900;
+  --chart-5: #fe9a00;
+  --radius: 0.75rem;
+  --sidebar: var(--color-neutral-0);
+  --sidebar-foreground: var(--color-neutral-900);
+  --sidebar-primary: var(--color-primary-600);
+  --sidebar-primary-foreground: var(--color-neutral-0);
+  --sidebar-accent: var(--color-primary-50);
+  --sidebar-accent-foreground: var(--color-primary-700);
+  --sidebar-border: var(--color-neutral-200);
+  --sidebar-ring: var(--color-primary-500);
+
+  --ticket-open-bg: #eff6ff;
+  --ticket-open-fg: #1d4ed8;
+  --ticket-assigned-bg: #f5f3ff;
+  --ticket-assigned-fg: #6d28d9;
+  --ticket-progress-bg: #ecfeff;
+  --ticket-progress-fg: #0e7490;
+  --ticket-waiting-bg: #fffbeb;
+  --ticket-waiting-fg: #b45309;
+  --ticket-resolved-bg: #f0fdf4;
+  --ticket-resolved-fg: #15803d;
+  --ticket-reopened-bg: #fff7ed;
+  --ticket-reopened-fg: #c2410c;
+  --ticket-closed-bg: #f1f5f9;
+  --ticket-closed-fg: #475569;
+  --ticket-cancelled-bg: #fef2f2;
+  --ticket-cancelled-fg: #b91c1c;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-info: var(--info);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-ticket-open-bg: var(--ticket-open-bg);
+  --color-ticket-open-fg: var(--ticket-open-fg);
+  --color-ticket-assigned-bg: var(--ticket-assigned-bg);
+  --color-ticket-assigned-fg: var(--ticket-assigned-fg);
+  --color-ticket-progress-bg: var(--ticket-progress-bg);
+  --color-ticket-progress-fg: var(--ticket-progress-fg);
+  --color-ticket-waiting-bg: var(--ticket-waiting-bg);
+  --color-ticket-waiting-fg: var(--ticket-waiting-fg);
+  --color-ticket-resolved-bg: var(--ticket-resolved-bg);
+  --color-ticket-resolved-fg: var(--ticket-resolved-fg);
+  --color-ticket-reopened-bg: var(--ticket-reopened-bg);
+  --color-ticket-reopened-fg: var(--ticket-reopened-fg);
+  --color-ticket-closed-bg: var(--ticket-closed-bg);
+  --color-ticket-closed-fg: var(--ticket-closed-fg);
+  --color-ticket-cancelled-bg: var(--ticket-cancelled-bg);
+  --color-ticket-cancelled-fg: var(--ticket-cancelled-fg);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+button,
+[role="button"] {
+  cursor: pointer;
+}
+::selection {
+  background: var(--color-primary-100);
+  color: var(--color-primary-800);
+}
+
+.auth-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      circle at 82% 18%,
+      rgba(169, 216, 202, 0.2),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 12% 86%,
+      rgba(94, 181, 156, 0.14),
+      transparent 34%
+    );
+}
+
+.auth-panel::after {
+  content: "";
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  right: -180px;
+  top: 28%;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 70px rgba(255, 255, 255, 0.025),
+    0 0 0 140px rgba(255, 255, 255, 0.018);
+}

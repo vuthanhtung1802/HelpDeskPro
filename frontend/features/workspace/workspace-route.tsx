@@ -65,6 +65,7 @@ export function WorkspaceRoute({
         setSession({ token, user });
       })
       .catch(() => {
+        if (controller.signal.aborted) return;
         clearAccessToken();
         setSessionError("Phiên đăng nhập đã hết hạn.");
         router.replace("/login");

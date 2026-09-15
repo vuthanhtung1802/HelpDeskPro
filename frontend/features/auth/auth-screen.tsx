@@ -188,7 +188,7 @@ export function AuthScreen({ mode }: { mode: "login" | "register" }) {
                 {error}
               </p>
             )}
-            <Button disabled={pending} className="h-12 w-full">
+            <Button type="submit" disabled={pending} className="h-12 w-full">
               {pending
                 ? "Đang xử lý..."
                 : mode === "login"

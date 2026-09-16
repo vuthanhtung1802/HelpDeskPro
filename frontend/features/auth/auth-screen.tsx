@@ -15,6 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { login, register } from "./api/auth-api";
 import { setAccessToken } from "./auth-session";
 import type { ApiRole, AuthResult } from "./types";
@@ -89,7 +90,8 @@ export function AuthScreen({ mode }: { mode: "login" | "register" }) {
           HelpDesk Pro · Support workspace
         </p>
       </section>
-      <section className="flex items-center justify-center p-5">
+      <section className="relative flex items-center justify-center p-5">
+        <ThemeToggle className="absolute right-4 top-4" />
         <div className="w-full max-w-md">
           <div className="mb-8 flex items-center gap-2 font-bold text-primary lg:hidden">
             <LifeBuoy /> HelpDesk Pro

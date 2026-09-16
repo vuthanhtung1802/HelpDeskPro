@@ -14,6 +14,7 @@ import {
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 import type { Role } from "@/features/auth/types";
 import { NotificationMenu } from "@/features/notifications/components/notification-menu";
 
@@ -120,6 +121,7 @@ export function WorkspaceShell({
             <Menu />
           </Button>
           <div className="ml-auto flex items-center gap-2 sm:gap-3">
+            <ThemeToggle />
             <NotificationMenu token={token} role={role} />
             <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
               {roleLabels[role]}

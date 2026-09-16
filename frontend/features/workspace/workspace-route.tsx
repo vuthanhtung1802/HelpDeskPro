@@ -3,8 +3,12 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { WorkspaceShell } from "@/components/layout/workspace-shell";
-import { getMe, logout } from "@/features/auth/api/auth-api";
-import { clearAccessToken, getAccessToken } from "@/features/auth/auth-session";
+import { getMe, logout, refreshSession } from "@/features/auth/api/auth-api";
+import {
+  clearAccessToken,
+  getAccessToken,
+  setAccessToken,
+} from "@/features/auth/auth-session";
 import {
   roleFromApi,
   type ApiRole,
@@ -50,21 +54,27 @@ export function WorkspaceRoute({
   const [sessionError, setSessionError] = useState("");
 
   useEffect(() => {
-    const token = getAccessToken();
-    if (!token) {
-      router.replace("/login");
-      return;
-    }
     const controller = new AbortController();
-    getMe(token, controller.signal)
-      .then((user) => {
+
+    async function loadSession() {
+      let token = getAccessToken();
+      if (!token) {
+        const refreshed = await refreshSession();
+        token = refreshed.accessToken;
+        setAccessToken(token);
+      }
+      const user = await getMe(token, controller.signal);
+      if (!controller.signal.aborted) {
         if (user.role !== allowedRole) {
           router.replace(dashboardPaths[user.role]);
           return;
         }
         setSession({ token, user });
-      })
-      .catch(() => {
+      }
+    }
+
+    void loadSession().catch(() => {
+        if (controller.signal.aborted) return;
         clearAccessToken();
         setSessionError("Phiên đăng nhập đã hết hạn.");
         router.replace("/login");

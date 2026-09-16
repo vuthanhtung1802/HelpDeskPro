@@ -301,14 +301,14 @@ export function TicketsPage({ role, token }: { role: Role; token: string }) {
         }
       />
       <form
-        className="mt-7 flex flex-col gap-3 rounded-2xl border bg-white p-4 sm:flex-row"
+        className="mt-7 flex flex-col gap-3 rounded-2xl border bg-card p-4 text-card-foreground shadow-sm sm:flex-row"
         onSubmit={(event) => {
           event.preventDefault();
           changeFilter(setSearch, searchInput.trim());
         }}
       >
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-3 size-4 text-slate-400" />
+          <Search className="absolute left-3 top-3 size-4 text-muted-foreground" />
           <Input
             value={searchInput}
             onChange={(event) => setSearchInput(event.target.value)}
@@ -364,7 +364,7 @@ export function TicketsPage({ role, token }: { role: Role; token: string }) {
         </Button>
       </form>
       {loading ? (
-        <div className="mt-4 rounded-2xl border bg-white p-10 text-center text-sm text-slate-500">
+        <div className="mt-4 rounded-2xl border bg-card p-10 text-center text-sm text-muted-foreground">
           Đang tải ticket...
         </div>
       ) : error ? (
@@ -375,9 +375,9 @@ export function TicketsPage({ role, token }: { role: Role; token: string }) {
           {error}
         </div>
       ) : (
-        <div className="mt-4 overflow-hidden rounded-2xl border bg-white">
+        <div className="mt-4 overflow-hidden rounded-2xl border bg-card text-card-foreground shadow-sm">
           <Table>
-            <TableHeader>
+            <TableHeader className="bg-muted/60">
               <TableRow>
                 <TableHead>Ticket</TableHead>
                 <TableHead>Trạng thái</TableHead>
@@ -387,14 +387,14 @@ export function TicketsPage({ role, token }: { role: Role; token: string }) {
             </TableHeader>
             <TableBody>
               {tickets.map((ticket) => (
-                <TableRow key={ticket.id}>
+                <TableRow key={ticket.id} className="hover:bg-muted/35">
                   <TableCell>
                     <Link
                       href={`${ticketBasePath}/${ticket.id}`}
                       className="font-semibold text-foreground hover:text-primary"
                     >
                       {ticket.title}
-                      <span className="block text-xs font-normal text-slate-400">
+                      <span className="block text-xs font-normal text-muted-foreground">
                         {ticket.code} · {ticket.category.name}
                       </span>
                     </Link>
@@ -414,7 +414,7 @@ export function TicketsPage({ role, token }: { role: Role; token: string }) {
           </Table>
         </div>
       )}
-      <div className="mt-4 flex items-center justify-between text-sm text-slate-500">
+      <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
         <span>
           Trang {meta.page}/{Math.max(meta.totalPages, 1)} · {meta.total} ticket
         </span>

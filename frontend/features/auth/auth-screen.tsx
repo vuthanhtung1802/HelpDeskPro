@@ -2,7 +2,6 @@
 
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import {
   ArrowRight,
   Eye,
@@ -26,7 +25,6 @@ const dashboardPaths: Record<ApiRole, string> = {
 };
 
 export function AuthScreen({ mode }: { mode: "login" | "register" }) {
-  const router = useRouter();
   const [pending, setPending] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
@@ -54,7 +52,7 @@ export function AuthScreen({ mode }: { mode: "login" | "register" }) {
               password,
             });
       setAccessToken(result.accessToken);
-      router.replace(dashboardPaths[result.user.role]);
+      window.location.assign(dashboardPaths[result.user.role]);
     } catch (reason) {
       setError(
         reason instanceof Error

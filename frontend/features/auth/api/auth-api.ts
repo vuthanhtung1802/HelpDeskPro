@@ -41,6 +41,22 @@ export function getMe(token: string, signal?: AbortSignal): Promise<AuthUser> {
   });
 }
 
+export function refreshSession(): Promise<{ accessToken: string }> {
+  return fetch("/api/auth/refresh", {
+    method: "POST",
+    credentials: "include",
+  }).then(async (response) => {
+    const body = (await response.json()) as {
+      data?: { accessToken: string };
+      message?: string;
+    };
+    if (!response.ok || !body.data?.accessToken) {
+      throw new Error(body.message ?? "Phiên đăng nhập đã hết hạn.");
+    }
+    return body.data;
+  });
+}
+
 export function forgotPassword(email: string): Promise<{ message: string }> {
   return apiRequest<{ message: string }>("/auth/forgot-password", {
     method: "POST",

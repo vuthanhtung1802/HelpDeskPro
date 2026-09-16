@@ -2,7 +2,6 @@
 
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import {
   ArrowRight,
   Eye,
@@ -27,14 +26,13 @@ const dashboardPaths: Record<ApiRole, string> = {
 };
 
 export function AuthScreen({ mode }: { mode: "login" | "register" }) {
-  const router = useRouter();
   const [pending, setPending] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
-  async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
+  async function authenticate(form: HTMLFormElement) {
+    if (pending) return;
+    const data = new FormData(form);
     const password = String(data.get("password") ?? "");
     if (
       mode === "register" &&
@@ -55,7 +53,7 @@ export function AuthScreen({ mode }: { mode: "login" | "register" }) {
               password,
             });
       setAccessToken(result.accessToken);
-      router.replace(dashboardPaths[result.user.role]);
+      window.location.assign(dashboardPaths[result.user.role]);
     } catch (reason) {
       setError(
         reason instanceof Error
@@ -67,9 +65,14 @@ export function AuthScreen({ mode }: { mode: "login" | "register" }) {
     }
   }
 
+  function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    void authenticate(event.currentTarget);
+  }
+
   return (
     <main className="grid min-h-screen bg-background p-4 lg:grid-cols-2 lg:p-8">
-      <section className="auth-panel hidden rounded-2xl bg-primary p-14 text-primary-foreground lg:flex lg:flex-col lg:justify-between">
+      <section className="auth-panel relative hidden overflow-hidden rounded-2xl bg-primary p-14 text-primary-foreground lg:flex lg:flex-col lg:justify-between">
         <div className="flex items-center gap-3 text-lg font-bold">
           <LifeBuoy /> HelpDesk Pro
         </div>
@@ -102,7 +105,12 @@ export function AuthScreen({ mode }: { mode: "login" | "register" }) {
           <h2 className="mt-2 text-3xl font-bold">
             {mode === "login" ? "Đăng nhập tài khoản" : "Bắt đầu với HelpDesk"}
           </h2>
-          <form className="mt-8 space-y-5" onSubmit={submit}>
+          <form
+            action="/api/auth/login"
+            method="post"
+            className="mt-8 space-y-5"
+            onSubmit={submit}
+          >
             {mode === "register" && (
               <div className="space-y-2">
                 <Label htmlFor="fullName">Họ và tên</Label>
@@ -190,7 +198,11 @@ export function AuthScreen({ mode }: { mode: "login" | "register" }) {
                 {error}
               </p>
             )}
-            <Button disabled={pending} className="h-12 w-full">
+            <Button
+              type="submit"
+              disabled={pending}
+              className="h-12 w-full"
+            >
               {pending
                 ? "Đang xử lý..."
                 : mode === "login"

@@ -103,7 +103,12 @@ export function AuthScreen({ mode }: { mode: "login" | "register" }) {
           <h2 className="mt-2 text-3xl font-bold">
             {mode === "login" ? "Đăng nhập tài khoản" : "Bắt đầu với HelpDesk"}
           </h2>
-          <form className="mt-8 space-y-5" onSubmit={submit}>
+          <form
+            action="/api/auth/login"
+            method="post"
+            className="mt-8 space-y-5"
+            onSubmit={submit}
+          >
             {mode === "register" && (
               <div className="space-y-2">
                 <Label htmlFor="fullName">Họ và tên</Label>
@@ -192,13 +197,9 @@ export function AuthScreen({ mode }: { mode: "login" | "register" }) {
               </p>
             )}
             <Button
-              type="button"
+              type="submit"
               disabled={pending}
               className="h-12 w-full"
-              onClick={(event) => {
-                const form = event.currentTarget.form;
-                if (form?.reportValidity()) void authenticate(form);
-              }}
             >
               {pending
                 ? "Đang xử lý..."

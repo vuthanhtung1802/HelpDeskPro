@@ -41,6 +41,13 @@ export function getMe(token: string, signal?: AbortSignal): Promise<AuthUser> {
   });
 }
 
+export function refreshSession(): Promise<{ accessToken: string }> {
+  return apiRequest<{ accessToken: string }>("/auth/refresh", {
+    method: "POST",
+    credentials: "include",
+  });
+}
+
 export function forgotPassword(email: string): Promise<{ message: string }> {
   return apiRequest<{ message: string }>("/auth/forgot-password", {
     method: "POST",

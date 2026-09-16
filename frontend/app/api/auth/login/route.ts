@@ -48,6 +48,11 @@ export async function POST(request: NextRequest) {
     { status: 303 },
   );
   const refreshCookie = response.headers.get("set-cookie");
-  if (refreshCookie) result.headers.append("set-cookie", refreshCookie);
+  if (refreshCookie) {
+    result.headers.append(
+      "set-cookie",
+      refreshCookie.replace(/Path=\/api\/v1\/auth/i, "Path=/"),
+    );
+  }
   return result;
 }

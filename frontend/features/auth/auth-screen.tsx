@@ -71,7 +71,7 @@ export function AuthScreen({ mode }: { mode: "login" | "register" }) {
 
   return (
     <main className="grid min-h-screen bg-background p-4 lg:grid-cols-2 lg:p-8">
-      <section className="auth-panel hidden rounded-2xl bg-primary p-14 text-primary-foreground lg:flex lg:flex-col lg:justify-between">
+      <section className="auth-panel relative hidden overflow-hidden rounded-2xl bg-primary p-14 text-primary-foreground lg:flex lg:flex-col lg:justify-between">
         <div className="flex items-center gap-3 text-lg font-bold">
           <LifeBuoy /> HelpDesk Pro
         </div>

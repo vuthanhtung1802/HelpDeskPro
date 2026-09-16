@@ -31,9 +31,9 @@ export function AuthScreen({ mode }: { mode: "login" | "register" }) {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
-  async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
+  async function authenticate(form: HTMLFormElement) {
+    if (pending) return;
+    const data = new FormData(form);
     const password = String(data.get("password") ?? "");
     if (
       mode === "register" &&
@@ -64,6 +64,11 @@ export function AuthScreen({ mode }: { mode: "login" | "register" }) {
     } finally {
       setPending(false);
     }
+  }
+
+  function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    void authenticate(event.currentTarget);
   }
 
   return (
@@ -188,7 +193,15 @@ export function AuthScreen({ mode }: { mode: "login" | "register" }) {
                 {error}
               </p>
             )}
-            <Button type="submit" disabled={pending} className="h-12 w-full">
+            <Button
+              type="button"
+              disabled={pending}
+              className="h-12 w-full"
+              onClick={(event) => {
+                const form = event.currentTarget.form;
+                if (form?.reportValidity()) void authenticate(form);
+              }}
+            >
               {pending
                 ? "Đang xử lý..."
                 : mode === "login"

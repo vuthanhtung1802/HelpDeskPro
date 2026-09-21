@@ -502,6 +502,17 @@ GET /tickets?page=1&limit=10&status=OPEN&priority=HIGH&search=login
 | GET    | `/dashboard/agent` | Agent | Thống kê cá nhân        |
 | GET    | `/dashboard/user`  | User  | Thống kê ticket cá nhân |
 
+### AI chatbot
+
+| Method | Endpoint       | Quyền      | Chức năng                       |
+| ------ | -------------- | ---------- | ------------------------------- |
+| POST   | `/ai-chat/ask` | User/Agent | Hỏi đáp với trợ lý HelpDesk Pro |
+
+- Chatbot chỉ tư vấn và trả lời câu hỏi, không tự tạo hoặc thay đổi ticket.
+- Lịch sử hội thoại chỉ được giữ trong phiên trình duyệt và không lưu vào database.
+- Backend gọi Gemini bằng API key từ biến môi trường; frontend không được nhận API key.
+- Mỗi request gửi tối đa 10 tin nhắn gần nhất để giới hạn dữ liệu và chi phí.
+
 ## 11. Authentication và bảo mật
 
 - Mật khẩu được hash bằng `bcrypt`.
@@ -538,12 +549,14 @@ GET /tickets?page=1&limit=10&status=OPEN&priority=HIGH&search=login
 - `/tickets/new`
 - `/tickets/[id]`
 - `/profile`
+- `/chatbot`
 
 ### Agent
 
 - `/agent/dashboard`
 - `/agent/tickets`
 - `/agent/tickets/[id]`
+- `/staff/chatbot`
 
 ### Admin
 

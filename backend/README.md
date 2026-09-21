@@ -124,6 +124,16 @@ one-time reset link. When SMTP is disabled or delivery fails, the endpoint keeps
 the same anti-enumeration response and no usable token remains. Changing or
 resetting a password revokes every active refresh token for that account.
 
+## AI Q&A chatbot
+
+USER and AGENT accounts can access the stateless Q&A endpoint:
+
+- `POST /api/v1/ai-chat/ask`
+
+Set `GEMINI_API_KEY` and optionally `GEMINI_MODEL` in `.env` to enable it. The
+browser sends at most the latest 10 messages; conversations are not stored in
+the database. ADMIN accounts cannot access this endpoint.
+
 Replace both JWT secrets in `.env` with different random values of at least 32
 characters before starting the application. Do not commit `.env`.
 

@@ -19,13 +19,15 @@ import { Dashboard } from "@/features/dashboard/dashboard";
 import { TicketDetailPage } from "@/features/tickets/detail/ticket-detail-page";
 import { TicketsPage } from "@/features/tickets/tickets-page";
 import { UsersPage } from "@/features/users/components/users-page";
+import { AiChatPage } from "@/features/ai-chat/components/ai-chat-page";
 
 type WorkspaceView =
   | "dashboard"
   | "tickets"
   | "ticket-detail"
   | "users"
-  | "categories";
+  | "categories"
+  | "ai-chat";
 
 const dashboardPaths: Record<ApiRole, string> = {
   USER: "/dashboard",
@@ -112,6 +114,8 @@ export function WorkspaceRoute({
         <TicketDetailPage token={session.token} currentUser={session.user} />
       ) : view === "users" ? (
         <UsersPage token={session.token} currentUserId={session.user.id} />
+      ) : view === "ai-chat" ? (
+        <AiChatPage token={session.token} role={session.user.role} />
       ) : (
         <CategoriesPage token={session.token} />
       )}

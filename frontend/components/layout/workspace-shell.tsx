@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  Bot,
   FolderKanban,
   LayoutDashboard,
   LifeBuoy,
@@ -31,10 +32,12 @@ const navigation: Record<
   customer: [
     { href: "/dashboard", label: "Tổng quan", icon: LayoutDashboard },
     { href: "/tickets", label: "Ticket của tôi", icon: FolderKanban },
+    { href: "/chatbot", label: "Trợ lý hỏi đáp", icon: Bot },
   ],
   staff: [
     { href: "/staff/dashboard", label: "Tổng quan", icon: LayoutDashboard },
     { href: "/staff/tickets", label: "Hàng đợi xử lý", icon: FolderKanban },
+    { href: "/staff/chatbot", label: "Trợ lý hỏi đáp", icon: Bot },
   ],
   admin: [
     { href: "/admin/dashboard", label: "Tổng quan", icon: LayoutDashboard },

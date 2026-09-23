@@ -153,6 +153,17 @@ class EnvironmentVariables {
   @ValidateIf((environment: EnvironmentVariables) => environment.SMTP_ENABLED)
   @IsUrl({ require_tld: false })
   RESET_PASSWORD_URL?: string;
+
+  @ValidateIf((environment: EnvironmentVariables) =>
+    Boolean(environment.GEMINI_API_KEY),
+  )
+  @IsString()
+  @MinLength(1)
+  GEMINI_API_KEY?: string;
+
+  @IsString()
+  @MinLength(1)
+  GEMINI_MODEL: string = 'gemini-2.5-flash';
 }
 
 export function validateEnvironment(

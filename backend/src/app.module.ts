@@ -16,6 +16,7 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { AttachmentsModule } from './modules/attachments/attachments.module';
 import { RatingsModule } from './modules/ratings/ratings.module';
+import { AiChatModule } from './modules/ai-chat/ai-chat.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { RatingsModule } from './modules/ratings/ratings.module';
     DashboardModule,
     AttachmentsModule,
     RatingsModule,
+    AiChatModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: ThrottlerGuard }],
